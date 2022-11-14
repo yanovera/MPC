@@ -1,7 +1,8 @@
 import polytope.polytope as pc
 import numpy as np
 import matplotlib.pyplot as plt
-import ppopt
+from pytope import Polytope as pt
+from ppopt.geometry import polytope as pp
 
 
 def main():
@@ -50,13 +51,40 @@ def main():
 
     p1_vertices = pc.extreme(a[0])
 
-    h = pc.qhull(pc.extreme(a))
-    h.plot(ax)
+    p2_vertices = pc.extreme(a[1])
 
-    plt.xlim([-1.5, 1.5])
-    plt.ylim([-1.5, 1.5])
+    p3_vertices = pc.extreme(a[2])
+
+    all_vertices = np.concatenate((p1_vertices, p2_vertices, p3_vertices))
+
+    h = pc.qhull(all_vertices)
+
+    # h.plot(ax)
+
+    p1_pt = pt(pc.extreme(p1))
+
+    p2_pt = pt(pc.extreme(p2))
+
+    madd = p1_pt + p2_pt
+
+    pdiff = p1_pt - p2_pt
+
+    p1_pt.plot(ax, facecolor='red')
+
+    pdiff.plot(ax, facecolor='green')
+
+    p2_pt.plot(ax, facecolor='blue')
+
+    plt.xlim([-1.5, 2])
+    plt.ylim([-1.5, 2])
 
     plt.show()
+
+    p1_pp = pp.Polytope(p1.A, p1.b)
+    p1_pp = pp.Polytope(p1_pt.A, p1_pt.b)
+
+
+
 
 
 # Press the green button in the gutter to run the script.
